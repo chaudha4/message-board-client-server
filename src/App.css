@@ -1,38 +1,65 @@
-.App {
+html {
+  font-size: 10px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/*
+It is often useful to set box-sizing to border-box to layout 
+elements. This makes dealing with the sizes of elements much 
+easier, and generally eliminates a number of pitfalls you 
+can stumble on while laying out your content. 
+*/
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.container {
+  margin: 0 auto;
+  max-width: 100rem;
+  padding: 3rem;
+ 
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.title {
+  font-size: 4.4rem;
+  text-align: center;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+  padding: 2rem 2rem;
+  border-radius: 2rem;   
 }
 
-.App-link {
-  color: #61dafb;
+.form {
+  /*display:grid;*/
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.label {
+  font-size: 2rem;
+  margin-bottom: 0.2rem;
+  /*text-transform: uppercase;*/
+}
+
+.card-list {
+  margin-top: 4rem;
+}
+
+.card {
+  padding: 2rem 4rem;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.15);
+  margin-bottom: 2rem;
+  background-color: white;
+  text-align: left;
+}
+
+.card--title {
+  font-size: 2.5rem;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.50);
+  max-width: 80%;
+
+}
+
+p {
+  font-size: 1.5rem;
 }
