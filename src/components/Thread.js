@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import Replies from './Replies';
+import Reply from './Reply';
 
-export default function Threads({board}) {
+export default function Thread({board}) {
 
     console.log("Entering Threads with argument %o", board);
 
@@ -35,23 +35,30 @@ export default function Threads({board}) {
       }  
       
       return (
-              <div className="card">
-                <h2 className="card--title">
-                  {board.board} - thread "{board.text}"
-                </h2>
-                <p><b>Created On: </b>{board.created_on}</p>
-                <p><b>Last Updated: </b>{board.bumped_on}</p>
-                <p><b>Thread Id: </b>{board.thread_id}</p>
-                <p>
-                  Report Thread <input type="checkbox"
+        <div className="card">
+            <h2 className="card--title">
+                {board.board} - thread "{board.text}"
+        </h2>
+            <p><b>Created On: </b>{board.created_on}</p>
+            <p><b>Last Updated: </b>{board.bumped_on}</p>
+            <p><b>Thread Id: </b>{board.thread_id}</p>
+            <p>
+                Report Thread <input type="checkbox"
                     value={board.thread_id}
                     checked={reported}
                     onChange={reportThread} />
-                </p>
-    
-                <Replies board={board}/>
-        
-              </div>
+            </p>
+
+            <p><b>Replies: </b>{board.reply.length}</p>
+
+            {board.reply.map(rply => (
+                <Reply key={rply._id} boardName={board.board}
+                    threadId={board.thread_id}
+                    reply={rply}
+                />
+            ))}
+
+        </div>
             
 
       );      

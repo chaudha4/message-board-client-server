@@ -29,12 +29,17 @@ can stumble on while laying out your content.
 }
 
 .form {
-  /*display:grid;*/
+    /*display:grid;*/
 }
+
+.button {
+  margin: 1rem .5rem;
+}
+
 
 .label {
   font-size: 2rem;
-  margin-bottom: 0.2rem;
+  margin: 1rem 1rem;
   /*text-transform: uppercase;*/
 }
 
@@ -71,4 +76,27 @@ can stumble on while laying out your content.
 
 p {
   font-size: 1.5rem;
+}
+
+/* For popup support - Modal is the first layer */
+.modal {
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  /*background-color: rgba(0, 0, 0, 0.50);*/
+}
+
+/* For popup support - 2nd layer - Popup content */
+/* Keep position absolute to ties to 1st layer */
+.modal_content {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 25%;
+  bottom: 25%;
+  margin: auto;
+  background-color: rgb(185, 184, 184); 
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.10);  
 }
