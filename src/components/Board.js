@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import Thread from './Thread';
 import Popup from './Popup';
+import {getBoardApi, createBoardApi} from '../api/BoardApi';
 
 export default function Board(props) {
 
@@ -10,51 +11,25 @@ export default function Board(props) {
   const [popup, setPopup] = useState({visible: false, mesg: null});
 
   const [boards, setBoards] = useState([]);
-
-  const getBoard = async (e) => {
-
-    e.preventDefault();
-
-    // Assumption is that the server is ruuing at the same domain as client.
-    //const url = window.location.href + `b/${query}/`;
-
-    const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${query}/`
-    
-    console.log("Accessing URL %s", url);
-
-    try {
-      const res = await fetch(url);
-      console.log(res);
-      const data = await res.json();
-      console.log(data);
-      setBoards(data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
   
+  const getBoard = async (e) => {
+    e.preventDefault();
+    const data = await getBoardApi(query);
+    if (data && data.length > 0) {
+        setBoards(data);
+    } else {
+        setPopup({visible: true, mesg: "Get Failed for " + query});
+    } 
+  }
+
   const createBoard = async (e) => {
-    console.log("CreateBoard");
-    console.log(query);
-
-    const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${query}/`
-
-    try {
-      // POST /api/threads/:board
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        body: JSON.stringify({
-          board: query
-        }),
-      });
-      console.log(res);
-      const data = await res.json();
-      console.log(data);
-      setBoards(data);
-    } catch (err) {
-      //console.error(err);
-    }    
+    e.preventDefault();
+    const data = await createBoardApi(query);
+    if (data) {
+        setBoards(data);
+    } else {
+        setPopup({visible: true, mesg: "Create Failed for " + query});
+    }
   }
   
   const deleteBoard = async (e) => {
@@ -99,32 +74,34 @@ export default function Board(props) {
   
   return (
     <div>
-      <form className="form" onSubmit={getBoard}>
-        {/* htmlFor attribute specifies which form element a label is bound to. */}
-        <label className="label" htmlFor="query">Board Name:</label>
-        <input className="input" type="text" name="query"
-          placeholder="Please enter board name"
-          value={query} onChange={(e) => setQuery(e.target.value)}
-        />
+        <form className="form" onSubmit={getBoard}>
+            {/* htmlFor attribute specifies which form element a label is bound to. */}
+            <label className="label" htmlFor="query">Board Name:</label>
+            <input className="input" type="text" name="query"
+                placeholder="Please enter board name"
+                value={query} onChange={(e) => setQuery(e.target.value)}
+            />
+            <button className="button" type="submit">Get</button>
+        </form>
+
+        <br></br>
+        
+        
+        <button className="button" type="button"
+            onClick={createBoard}>Create</button>
+        <button className="button" type="button"
+            onClick={deleteBoard}>Delete</button>
 
         {/* Manage popup dialog */}
         {popup.visible ? <Popup hidePopup={hidePopupCB} mesg={popup.mesg} /> : null}
         <button className="button" type="button"
-          onClick={testPopup}>Test Popup</button>
-      </form>
+            onClick={testPopup}>Test Popup</button>
 
-      <br></br>
-      <button className="button" type="submit">Get</button>
-      <button className="button" type="button"
-        onClick={createBoard}>Create</button>
-      <button className="button" type="button"
-        onClick={deleteBoard}>Delete</button>
-
-      <div className="card-list">
-        {boards.map(b => (
-          <Thread key={b._id} board={b} />
-        ))}
-      </div>
+        <div className="card-list">
+            {boards.map(b => (
+                <Thread key={b._id} board={b} />
+            ))}
+        </div>
 
     </div>
   );
