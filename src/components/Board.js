@@ -65,7 +65,7 @@ export default function Board(props) {
         <form className="form" onSubmit={getBoard}>
             {/* htmlFor attribute specifies which form element a label is bound to. */}
             <label className="label" htmlFor="query">Board Name:</label>
-            <input className="input" type="text" name="query"
+            <input type="text" name="query"
                 placeholder="Please enter board name"
                 value={query} onChange={(e) => setQuery(e.target.value)}
             />

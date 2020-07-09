@@ -36,7 +36,8 @@ async function createBoardApi(boardName) {
             method: 'POST',
             headers: { 'Content-type': 'application/json; charset=UTF-8' },
             body: JSON.stringify({
-                board: boardName
+                board: boardName,
+                text: "New Thread - Please update"
             }),
         });
         console.log("createBoardApi: Received res ", res);

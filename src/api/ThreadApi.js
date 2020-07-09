@@ -1,10 +1,44 @@
-import {getBoardApi} from './BoardApi';
+
+import {BASE_URL} from "./global";
+
+//const base_url = "https://chaudha4-mesgboard-mongo.glitch.me/";
+
+async function updateThreadTextApi(boardData, newText) {
+
+  let params = {
+    boardName: boardData.board,
+    thread_id: boardData.thread_id,
+    text: newText
+  };
+
+  let urlQuery = Object.keys(params)
+    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+    .join('&');
+
+  let getUrl = `${BASE_URL}api/updateThreadText?${urlQuery}`;
+
+
+  console.log("updateThreadTextApi argument: %s %o", getUrl, params);     
+
+  try {
+    const res = await fetch(getUrl);
+    console.log("updateThreadTextApi: Received res %o", res);
+    //const data = await res.json();
+    //console.log("updateThreadTextApi: Returning %o", data);
+    //return data;
+
+  } catch (err) {
+    console.error(err);
+  }    
+
+
+} //updateThreadTextApi
 
 async function reportThreadApi(boardData) {
 
     console.log("reportThreadApi argument: %o", boardData);
 
-    const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardData.board}/`
+    const url = `${BASE_URL}api/threads/${boardData.board}/`;
            
     try {
       const res = await fetch(url, {
@@ -30,21 +64,32 @@ async function reportThreadApi(boardData) {
 
 } //reportThreadApi
 
-async function getThreadApi(boardData) {
+async function getThreadApi(boardName, threadId) {
 
-    console.log("getThreadApi argument: %o", boardData);
+    let params = {
+      boardName: boardName,
+      thread_id: threadId
+    };
 
-    const data = await getBoardApi(boardData.board);
+    let urlQuery = Object.keys(params)
+      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+      .join('&');
 
-    data.forEach(element => {
-        console.log("getThreadApi Processing Element: %o", element);
-        if (element.thread_id == boardData.thread_id) {
-            return element;
-        }
-    });
+    let getUrl = `${BASE_URL}api/getThread?${urlQuery}`;
 
-    return [];
+    console.log("getThreadApi argument: %s %s %s", getUrl, boardName, threadId);    
+
+    try {
+      const res = await fetch(getUrl);
+      console.log("reportThreadApi: Received res %o", res);
+      const data = await res.json();
+      console.log("reportThreadApi: Returning %o", data);
+      return data;
+
+    } catch (err) {
+      console.error(err);
+    }    
 
 } //reportThreadApi
 
-export {reportThreadApi};
+export {reportThreadApi, getThreadApi, updateThreadTextApi};

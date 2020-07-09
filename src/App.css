@@ -32,6 +32,11 @@ can stumble on while laying out your content.
     /*display:grid;*/
 }
 
+.input {
+  width: 80%;
+  height: 80%;
+}
+
 .button {
   margin: 1rem .5rem;
 }
