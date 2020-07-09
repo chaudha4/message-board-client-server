@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import Thread from './Thread';
 import Popup from './Popup';
-import {getBoardApi, createBoardApi} from '../api/BoardApi';
+import {getBoardApi, createBoardApi, deleteBoardApi} from '../api/BoardApi';
 
 export default function Board(props) {
 
@@ -19,6 +19,7 @@ export default function Board(props) {
         setBoards(data);
     } else {
         setPopup({visible: true, mesg: "Get Failed for " + query});
+        setBoards([]);
     } 
   }
 
@@ -29,33 +30,20 @@ export default function Board(props) {
         setBoards(data);
     } else {
         setPopup({visible: true, mesg: "Create Failed for " + query});
+        setBoards([]);
     }
   }
   
   const deleteBoard = async (e) => {
-    console.log("deleteBoard");
-    console.log(query);
+    e.preventDefault();
+    const data = await deleteBoardApi(query);
+    if (data) {
+        setBoards([]);
+    } else {
+        setPopup({visible: true, mesg: "Delete Failed for " + query});
+        setBoards([]);
+    }
 
-    const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${query}/`
-
-    try {
-      // POST /api/threads/:board
-      const res = await fetch(url, {
-        method: 'DELETE',
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        body: JSON.stringify({
-          board: query
-        }),
-      });
-      console.log(res);
-      const data = await res.json();
-      console.log(data);
-      setBoards({});
-      setPopup({visible: true, mesg: "Delete Successful for " + query});
-    } catch (err) {
-      setPopup({visible: true, mesg: "Delete Failed for " + query});      
-      console.error(err);
-    }    
   }
 
   // Will be called from the Popup component.

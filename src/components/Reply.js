@@ -1,20 +1,19 @@
 import React, {useState} from "react";
-import {reportReply} from "../api/ReplyApi";
+import {reportReplyApi} from "../api/ReplyApi";
 
 //export default function Reply(props) {
-export default function Reply({boardName, threadId, reply}) {
+export default function Reply({boardData, replyData}) {
 
-    console.log("Entering Replies with argument %o", boardName);   
+    console.log("Entering Replies with argument %o", boardData);   
 
     return (
         <div className="card--reply" >
-            <p>{reply.reply}</p>
-            <p>Reply Id: {reply._id}</p>
+            <p>{replyData.reply ? replyData.reply : "Empty Reply Text"}</p>
+            <p>Reply Id: {replyData._id}</p>
             <p>
                 Report Reply <input type="checkbox"
-                    checked={reply.reported}
-                    value={JSON.stringify({ 'a': threadId, 'b': reply._id })}
-                    onChange={(e) => reportReply(boardName, threadId, reply)} />
+                    checked={replyData.reported}
+                    onChange={(e) => reportReplyApi(boardData.board, boardData.thread_id, replyData)} />
             </p>
         </div>
 

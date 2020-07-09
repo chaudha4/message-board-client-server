@@ -1,8 +1,8 @@
 async function getBoardApi(boardName) {
 
-    if (!boardName || boardName === "") {
+    if (!validateBoard(boardName)) {
         console.log("getBoardApi: Board name is empty");
-        return;
+        return [];
     }
     const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardName}/`
 
@@ -17,12 +17,13 @@ async function getBoardApi(boardName) {
     } catch (err) {
         console.error(err);
     }
+    return [];
 
 } //getBoard
 
 async function createBoardApi(boardName) {
 
-    if (!boardName || boardName === "") {
+    if (!validateBoard(boardName)) {
         console.log("createBoardApi: Board name is empty");
         return;
     }
@@ -48,4 +49,37 @@ async function createBoardApi(boardName) {
     }
 } //createBoardApi
 
-export { getBoardApi, createBoardApi };
+async function deleteBoardApi(boardName) {
+
+    if (!validateBoard(boardName)) {
+        return false;
+    }
+
+    const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardName}/`
+
+    try {
+        // POST /api/threads/:board
+        const res = await fetch(url, {
+            method: 'DELETE',
+            headers: { 'Content-type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify({
+                board: boardName
+            }),
+        });
+        console.log("Delete Successful for %s - Res:", boardName, res);
+        return true;
+    } catch (err) {
+        console.log("Delete Failed for %s - Error %o:", boardName, err);
+    }
+    return false;
+
+} //deleteBoardApi
+
+function validateBoard(boardName) {
+    if (!boardName || boardName === "") {
+        console.log("createBoardApi: Board name is empty");
+        return false;
+    }    
+    return true;
+}
+export { getBoardApi, createBoardApi, deleteBoardApi};

@@ -1,67 +1,76 @@
 import React, {useState} from "react";
 import Reply from './Reply';
+import {reportThreadApi} from '../api/ThreadApi';
+import {createReplyApi} from '../api/ReplyApi';
 
 export default function Thread({board}) {
 
-    console.log("Entering Threads with argument %o", board);
+  console.log("Entering Threads with argument %o", board);
 
-    const [reported, setReported] = useState(board.reported);    
+  const [repData, setReported] = useState(board.reported);
 
-    const reportThread = async (e) => {
+  const [newReply, setNewReply] = useState('');
 
-        //e.preventDefault();
-    
-        // Assumption is that the server is ruuing at the same domain as client.
-        //const url = window.location.href + `b/${query}/`;
-    
-        const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${board}/`
-        
-        console.log("Accessing URL %s Value-%s", url, e.target.value);
-        
-        try {
-          const res = await fetch(url, {
-            method: 'PUT',
-            headers: {'Content-type': 'application/json; charset=UTF-8'},
-            body: JSON.stringify({board: board.board, thread_id: e.target.value}),        
-          })
-          console.log(res);
-          const data = await res.json();
-          console.log(data);
-          setReported(false); //toggle
-        } catch (err) {
-          console.error(err);
-        }
-    
-      }  
+  const reportThread = async (e) => {
+    e.preventDefault();
+    const data = await reportThreadApi(board);
+    console.log("reportThread: Received Thread data %o", data);
+    setReported(data.reported);
+  }
+  
+  const addNewReply = async (e) => {
+    e.preventDefault();
+    const data = await createReplyApi(board, newReply);
+    console.log("addNewReply: Received Thread data %o", data);
+    setNewReply("");
+    /*
+    const data = await getBoardApi(query);
+    if (data && data.length > 0) {
+        setBoards(data);
+    } else {
+        setPopup({visible: true, mesg: "Get Failed for " + query});
+        setBoards([]);
+    } 
+    */
+  }  
       
-      return (
-        <div className="card">
-            <h2 className="card--title">
-                {board.board} - thread "{board.text}"
+  return (
+    <div className="card">
+      <h2 className="card--title">
+        {board.board} - thread "{board.text}"
         </h2>
-            <p><b>Created On: </b>{board.created_on}</p>
-            <p><b>Last Updated: </b>{board.bumped_on}</p>
-            <p><b>Thread Id: </b>{board.thread_id}</p>
-            <p>
-                Report Thread <input type="checkbox"
-                    value={board.thread_id}
-                    checked={reported}
-                    onChange={reportThread} />
-            </p>
+      <p><b>Created On: </b>{board.created_on}</p>
+      <p><b>Last Updated: </b>{board.bumped_on}</p>
+      <p><b>Thread Id: </b>{board.thread_id}</p>
+      <p><b>Reported: </b>{repData ? "Yes" : "No"}</p>
+      <p>
+        Report Thread <input type="checkbox"
+          value={board.thread_id}
+          checked={repData}
+          onChange={reportThread} />
+      </p>
 
-            <p><b>Replies: </b>{board.reply.length}</p>
+      <p><b>Replies: </b>{board.reply.length}</p>
 
-            {board.reply.map(rply => (
-                <Reply key={rply._id} boardName={board.board}
-                    threadId={board.thread_id}
-                    reply={rply}
-                />
-            ))}
+      <form className="form" onSubmit={addNewReply}>
+            <input className="input" type="text"
+                placeholder="Add a new Reply"
+                value={newReply} 
+                onChange={(e) => setNewReply(e.target.value)}
+            />
+            <button className="button" type="submit">Reply</button>
+      </form>
 
-        </div>
-            
+      {board.reply.map(element => (
+        <Reply key={element._id} boardData={board}
+        replyData={element}
+        />
+      ))}
 
-      );      
+    </div>
+
+
+  );      
       
 
 } //Threads
