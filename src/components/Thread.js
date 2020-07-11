@@ -91,25 +91,14 @@ export default function Thread({board}) {
               />
               <button className="button" type="submit">Reply</button>
         </form>
-  
-  
-        {/*
-          value11 is just an additional parameter passed to the component
-          to force it to refresh when boarddata is changed. Without it,
-          it does not refresh. Not sure why since the same data also passed
-          again in the seond parameter.
-  
-          Only difference is that the second parameter is actually used by
-          the component and maybe React gives up the ownership while value11
-          stays with the "props" and React re-renders when value11 changes
-        */}
-  
+   
         {boardData.reply.map(element => (
-          <Reply key={element._id} value11={boardData} boardData={boardData}
-          replyData={element}
+          <Reply key={element._id}
+            boardData={boardData}
+            replyData={element}
           />
         ))}
-  
+
       </div>
   
   

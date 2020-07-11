@@ -9,11 +9,11 @@ export default function Board(props) {
 
   const [query, setQuery] = useState('');
 
-  const [popup, setPopup] = useState({visible: false, mesg: null});
-
   const [boards, setBoards] = useState([]);
 
   const [loading, setLoading] = useState(false);
+
+  const [popup, setPopup] = useState({visible: false, mesg: null});
   
   const getBoard = async (e) => {
     e.preventDefault();
@@ -58,10 +58,8 @@ export default function Board(props) {
   // Will be called from the Popup component.
   const hidePopupCB = () => {
     console.log("Toggling Popup visible-", popup);
-    //setPopup({visible: !popup.visible, mesg: "Testing a new message"});
     setPopup({visible: !popup.visible});
   }
-
 
   const testPopup = () => {
     console.log("Testing Popup visible-", popup);
@@ -71,6 +69,10 @@ export default function Board(props) {
   const renderMe = () => {
     if (loading) {
       return <SplashScreen />;
+    }
+
+    if (popup.visible) {
+      return <Popup hidePopup={hidePopupCB} mesg={popup.mesg} />
     }
 
     return (
@@ -93,8 +95,7 @@ export default function Board(props) {
           <button className="button" type="button"
               onClick={deleteBoard}>Delete</button>
   
-          {/* Manage popup dialog */}
-          {popup.visible ? <Popup hidePopup={hidePopupCB} mesg={popup.mesg} /> : null}
+          {/* Test Popup. Needs to be removed */}
           <button className="button" type="button"
               onClick={testPopup}>Test Popup</button>
   
