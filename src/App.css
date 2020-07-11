@@ -79,6 +79,13 @@ can stumble on while laying out your content.
   margin-left: 2rem;
 }
 
+
+.SplashScreen {
+  display: flex;
+  justify-content: center;
+  margin: 20% auto;
+}
+
 p {
   font-size: 1.5rem;
 }

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Thread from './Thread';
 import Popup from './Popup';
 import {getBoardApi, createBoardApi, deleteBoardApi} from '../api/BoardApi';
+import SplashScreen from './SplashScreen';
 
 export default function Board(props) {
 
@@ -11,10 +12,14 @@ export default function Board(props) {
   const [popup, setPopup] = useState({visible: false, mesg: null});
 
   const [boards, setBoards] = useState([]);
+
+  const [loading, setLoading] = useState(false);
   
   const getBoard = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const data = await getBoardApi(query);
+    setLoading(false);
     if (data && data.length > 0) {
         setBoards(data);
     } else {
@@ -25,7 +30,9 @@ export default function Board(props) {
 
   const createBoard = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const data = await createBoardApi(query);
+    setLoading(false);
     if (data) {
         setBoards(data);
     } else {
@@ -36,7 +43,9 @@ export default function Board(props) {
   
   const deleteBoard = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const data = await deleteBoardApi(query);
+    setLoading(false);
     if (data) {
         setBoards([]);
     } else {
@@ -58,40 +67,47 @@ export default function Board(props) {
     console.log("Testing Popup visible-", popup);
     setPopup({visible: !popup.visible, mesg: "Testing a new message"});
   }
-    
+
+  const renderMe = () => {
+    if (loading) {
+      return <SplashScreen />;
+    }
+
+    return (
+      <div>
+          <form className="form" onSubmit={getBoard}>
+              {/* htmlFor attribute specifies which form element a label is bound to. */}
+              <label className="label" htmlFor="query">Board Name:</label>
+              <input type="text" name="query"
+                  placeholder="Please enter board name"
+                  value={query} onChange={(e) => setQuery(e.target.value)}
+              />
+              <button className="button" type="submit">Get</button>
+          </form>
   
-  return (
-    <div>
-        <form className="form" onSubmit={getBoard}>
-            {/* htmlFor attribute specifies which form element a label is bound to. */}
-            <label className="label" htmlFor="query">Board Name:</label>
-            <input type="text" name="query"
-                placeholder="Please enter board name"
-                value={query} onChange={(e) => setQuery(e.target.value)}
-            />
-            <button className="button" type="submit">Get</button>
-        </form>
-
-        <br></br>
-        
-        
-        <button className="button" type="button"
-            onClick={createBoard}>Create</button>
-        <button className="button" type="button"
-            onClick={deleteBoard}>Delete</button>
-
-        {/* Manage popup dialog */}
-        {popup.visible ? <Popup hidePopup={hidePopupCB} mesg={popup.mesg} /> : null}
-        <button className="button" type="button"
-            onClick={testPopup}>Test Popup</button>
-
-        <div className="card-list">
-            {boards.map(b => (
-                <Thread key={b._id} board={b} />
-            ))}
-        </div>
-
-    </div>
-  );
+          <br></br>
+          
+          
+          <button className="button" type="button"
+              onClick={createBoard}>Create</button>
+          <button className="button" type="button"
+              onClick={deleteBoard}>Delete</button>
+  
+          {/* Manage popup dialog */}
+          {popup.visible ? <Popup hidePopup={hidePopupCB} mesg={popup.mesg} /> : null}
+          <button className="button" type="button"
+              onClick={testPopup}>Test Popup</button>
+  
+          <div className="card-list">
+              {boards.map(b => (
+                  <Thread key={b._id} board={b} />
+              ))}
+          </div>
+  
+      </div>
+    );
+  }
+    
+  return renderMe();
 }
 
