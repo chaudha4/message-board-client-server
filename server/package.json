@@ -1,0 +1,43 @@
+{
+  "//1": "Depedencies for Express Server",
+  "//2": "See https://docs.npmjs.com/files/package.json",
+  "//3": "updating this file will download and update your packages",
+  "name": "message-board-server",
+  "version": "0.0.1",
+  "description": "REST Server for Message Board",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "watch": "npx nodejs-hot-reload entry=./server.js outDir=./build"
+  },
+  "dependencies": {
+    "body-parser": "latest",
+    "chai": "latest",
+    "chai-http": "latest",
+    "cors": "latest",
+    "express": "latest",
+    "helmet": "latest",
+    "mocha": "latest",
+    "mongodb": "latest",
+    "nodejs-hot-reload": "latest",
+    "zombie": "latest"
+  },
+  "engines": {
+    "node": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://hyperdev.com/#!/project/welcome-project"
+  },
+  "keywords": [
+    "node",
+    "helmet",
+    "express"
+  ],
+  "license": "MIT",
+  "directories": {
+    "test": "tests"
+  },
+  "author": "Abhishek Chaudhary"
+}

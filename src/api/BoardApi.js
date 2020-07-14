@@ -1,10 +1,13 @@
+import {BASE_URL} from "./global";
+
 async function getBoardApi(boardName) {
 
     if (!validateBoard(boardName)) {
         console.log("getBoardApi: Board name is empty");
         return [];
     }
-    const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardName}/`
+    //const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardName}/`
+    const url = `${BASE_URL}api/threads/${boardName}/`
 
     console.log("Accessing URL %s", url);
 
@@ -28,7 +31,8 @@ async function createBoardApi(boardName) {
         return;
     }
 
-    const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardName}/`
+    //const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardName}/`
+    const url = `${BASE_URL}api/threads/${boardName}/`
 
     try {
         // POST /api/threads/:board
@@ -56,7 +60,8 @@ async function deleteBoardApi(boardName) {
         return false;
     }
 
-    const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardName}/`
+    //const url = `https://chaudha4-mesgboard-mongo.glitch.me/api/threads/${boardName}/`
+    const url = `${BASE_URL}api/threads/${boardName}/`
 
     try {
         // POST /api/threads/:board
