@@ -1,3 +1,21 @@
+**Message Board Client And Server**
+
+Full stack app using Express.js, React.js, Node.js and MongoDb in Nodejs. 
+
+We run our React.js and Node.js app on the **same port**, avoiding the need of running two separate commands to start Node.js and React.js app !!
+
+We use express.static method provided by Express.js to serve Reactjs
+
+There are two package.json files - one for client and one for server.
+
+**Development Notes**
+
+For hot reloading, use `npm run watch` instead of `npm start`. `nodejs-hot-reload` must be installed for this to work. See
+https://www.npmjs.com/package/nodejs-hot-reload
+
+
+**Previous Notes**
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

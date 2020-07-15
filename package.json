@@ -1,4 +1,7 @@
 {
+  "//1": "Depedencies for React Client",
+  "//2": "See https://docs.npmjs.com/files/package.json",
+  "//3": "updating this file will download and update your packages",
   "name": "board",
   "version": "0.1.0",
   "private": true,
@@ -12,7 +15,8 @@
     "react-loading": "2.0.3"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start",
+    "start-client": "PORT=3001 react-scripts start",
+    "start": "npm run build && (cd server && npm start)",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
