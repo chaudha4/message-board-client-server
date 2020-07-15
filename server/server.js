@@ -30,8 +30,6 @@ app.use(helmet.referrerPolicy({ policy: 'same-origin' }))
 //Only allow your site to be loading in an iFrame on your own pages.
 app.use(helmet.frameguard({ action: 'sameorigin' }))
 
-app.use('/public', express.static(process.cwd() + '/public'));
-
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(bodyParser.json());
@@ -41,21 +39,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 console.log("process.cwd() - %s", process.cwd());
 console.log("__dirname - %s", __dirname);
 
-// add middlewares to serve react app
+/** 
+ * add middlewares to serve react app. The React app will be built in the
+ * build directory. So we will serve the React Client from that location.
+*/ 
 app.use(express.static(path.join(__dirname, "..", "build")));
-app.use(express.static("public"));
-
-//Sample front-end
-app.route('/b/:board/')
-  .get(function (req, res) {
-    res.sendFile(process.cwd() + '/views/board.html');
-  });
-  
-app.route('/b/:board/:threadid')
-  .get(function (req, res) {
-    res.sendFile(process.cwd() + '/views/thread.html');
-  });
-
 
 function notFoundMW() {
   return new Promise((resolve, reject) => {
@@ -72,25 +60,19 @@ function startServer() {
   return new Promise((resolve, reject) => {
     app.listen(process.env.PORT || 3000, function () {
       console.log("Server running at %o", this.address());
-      if(process.env.NODE_ENV==='test') {
-        console.log('Running Tests...');
-        setTimeout(function () {
-          try {
-            runner.run();
-          } catch(e) {
-            var error = e;
-              console.log('Tests are not valid:');
-              console.log(error);
-          }
-        }, 1500);
-      }
     });
     resolve();
   });  
 }
 
 //Routing for API 
-apiRoutes(app).then(notFoundMW).then(startServer);   
+apiRoutes(app)
+  .then(notFoundMW)
+  .then(startServer)
+  .catch(err => {
+    console.log("Fatal Error in setting up express server %0", err);
+    throw err;
+  });   
 
 
 //module.exports = app; //for testing
